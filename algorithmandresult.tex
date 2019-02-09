@@ -1,0 +1,30 @@
+\subsection{Algorithm} 
+
+\begin{algorithm}
+\label{algorithm:OFULER}
+\caption{\algname}
+\For{$t = 1, \ldots, n$} {
+    \textit{UCB: } $i_t \in \argmax_{\iinrange{1}{K}} \left[\max_{\mu \in \mathcal{C}_t^{s}(i)} \mu\right]$. \\
+    
+    \textit{OFUL: }$j_t,\tilde{\Omega}_t \in \argmax_{\iinrange{1}{K}, \Omega \in \mathcal{C}_t^c} \langle X_{i,t},\Omega \rangle$. \\
+
+    \If{$t > \tstar$ and 
+        \begin{align} \label{test:complextest} \sum_{s=1}^t \langle X_{j_s,s}, \tilde{\Omega}_s \rangle - \sum_{s=1}^t g_{i_s,s} \ge 100 \log(n) d\sqrt{t}.\end{align}}{
+        
+        }
+        
+}
+
+\end{algorithm}
+
+
+\note{clean algorithm up. Add intuition behind the pieces. Inspired by combining SAO with OFUL and UCB. Why does the test make sense.}
+
+\begin{theorem}\label{thm:mainregretbound}
+If we run \algname then we have the guarantee with high probability that,
+\begin{itemize}
+    \item Under the \emph{Simple Model} we have $\psued{n} \le \tilde{\mathcal{O}}\left(\sqrt{K n}\right)$.
+    \item Under the \emph{Complex Model} we have $\regret{n} \le \tilde{\mathcal{O}}\left(d\sqrt{K n}\right).$
+\end{itemize}
+\end{theorem}
+

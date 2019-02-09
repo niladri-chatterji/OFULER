@@ -1,0 +1,41 @@
+\section{Introduction}
+\rem{Write why contextual bandits are important. Write the running motivating example with drugs and patients vectors. The patients need to be given shown one of $K$ drugs. Maybe the contexts (age, sex, etc.) don't matter. Importance of best of both worlds in terms of saving on sample complexity.}
+ 
+\note{Add related work here.}
+\subsection{Problem Setup}
+
+At the beginning of each round $\tinrange{1}{n}$ the learner is required to choose one of $K$ arms and gets a \emph{reward} associated with that arm. To help make this choice the learner is handed a context vector at the beginning of each round $\Xt = [\Xit{1}{t},\ldots,\Xit{K}{t}] \in \mathbb{R}^{(d+K)\times K}$, which is a concatenation of $K$, $d+K$-dimensional vectors. Each of these contexts vectors $\Xit{i}{t}$ are themselves a concatenation of two vectors, $\Xit{i}{t} = [\alpt{i}{t},  \betat{i}{t}]$ where $\alpt{i}{t} \in \mathbb{R}^d$ has bounded 2-norm $\lv \alpt{i}{t} \rv_2 \le 1$ and $\betat{i}{t} \in \mathbb{R}^K$ is a vector that is $1$ in its $i^{th}$ coordinate and 0 everywhere else.
+
+The distribution of these contexts could be arbitrary and all we require from the distribution of the contexts is that it remain oblivious of the algorithm. It may be convenient to alternatively think of the contexts as being fixed before the beginning of the game but unknown to the learner. 
+
+At each round let $\git \in [0,1]$ denote the reward of arm $i$. The rewards could be generated from one of the two models below.
+\\
+
+\textbf{Simple Model} (SM): Under the model the mean rewards of $K$ arms are fixed (not a function of the contexts) and the rewards are stochastic. That is,
+\begin{align*}
+    g_{i,t} = \mustar{i} + \eta_{1,t},\qquad  \forall \iinrange{1}{K}
+    \end{align*}
+where $\{\eta_{i,t}\}_{i=1}^K$ are identical, independent, zero mean noise. The benchmark that the algorithm hopes to compete against is the \emph{expected pseudo-regret},
+\begin{align}
+    \label{def:expectedpseudoregret}
+    \mathbb{E}\left[R^{S}_n \right] := n \max_{\iinrange{1}{K}} \mustar{i} -\mathbb{E}\left[ \sum_{\iinrange{1}{K}}\sum_{s = 1}^n \mustar{i} \mathbb{I}\left[A_s = i\right]  \right]
+\end{align}
+where $A_s \in \{1,\ldots,K\}$ denotes the choice of the algorithm at round $s$. In the simple model we define the gap as the difference in the mean rewards of the best arm compared to the mean reward of the second best arm, that is, $\Delta :=  $ \note{define delta}. From previous literature on multi-armed bandits \citep{auer2002finite} we know that the best one can hope to do in this setting in a minimax sense is to have the pseudo-regret bounded by $\psued{n} \le \mathcal{O}(\sqrt{K n})$.
+
+
+\textbf{Complex Model} (CM): Under this model there exists an underlying linear predictor $\Omega^* = [\thetastar,  \nustar{1},\ldots,\nustar{K} ] \in \mathbb{R}^{d\times K}$ the mean rewards of the two arms are linear functions of the contexts,
+\begin{align*}
+    g_{i,t} = \langle \Omega^*, X_{i,t} \rangle + \eta_{i,t} = \nustar{i} + \langle \thetastar, \alpt{i}{t}\rangle + \eta_{i,t}
+\end{align*}
+for some $\nustar{i} \in [0,1]$, $\thetastar \in \unitball$ and as before $\{\eta_{i,t}\}_{t=1}^n$ are identical, independent zero mean noise. At each round define $x_t = \argmax_{\{\Xit{i}{t}\}_{i=1}^K}\left\{ \langle \Omega^*, X_{i,t}\rangle \right\}$ -- the context vector associated to the best arm at round $t$. The benchmark here is expected pseudo regret with respect to the generative linear model:
+\begin{align}
+\label{def:expectedregret}
+    \mathbb{E}\left[R^{C}_{n}\right] := \mathbb{E}\left[\sum_{i = \{1,\ldots,K\}}\sum_{s=1}^n \left(\langle x_t, \Omega^* \rangle - \langle \Xit{i}{s},\Omega^*\rangle \mathbb{I}\left[A_s = i \right] \right) \right],
+\end{align}
+where as above $A_s \in \{1,\ldots,K\}$ denotes the choice of the algorithm at round s. 
+
+%By using OFUL Algorithm \citep{abbasi2011improved} we can hope to have the pseudo-regret bounded by $\regret{n} \le \tilde{\mathcal{O}}(d\sqrt{n})$. Observe that clearly the Simple Model (SM) is contained within the Complex Model (CM). Does by using using OFUL we also simultaenously have that under the simple model $\psued{n} \le \tilde{\mathcal{O}}(d\sqrt{n})$. The question that we attempt to answer here is the following, can we do better?\\
+
+
+%\emph{Question: Does there exist an algorithm that simultaenously bounds the regret under the simple model at a rate $\psued{n} \le \tilde{\mathcal{O}}(\sqrt{n})$ and under the complex model at a rate $\regret{n}\le \tilde{\mathcal{O}}(d\sqrt{n})$?}
+
